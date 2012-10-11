@@ -1,5 +1,11 @@
 package com.connection;
 
-public class Communicator {
+public class Communicator 
+{
 
+	public void handleInput(Object obj) 
+	{
+		// TODO 	
+	}
+	
 }
