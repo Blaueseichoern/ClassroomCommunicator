@@ -45,19 +45,25 @@ public class ComWindow
 		//CHATS
 		chats = new JTabbedPane();
 		generalChat = new JPanel();
+		initGeneralChat();
 		chats.addTab("general Chat", generalChat);
 		
 		Container c = main.getContentPane();
 		
-		addComponent(c, gbl, participants, 0, 0, 1, 2, 0, 0);
-		addComponent(c, gbl, chats, 1, 0, 2, 2, 0, 0);
+		addComponent(c, gbl, participants, 0, 0, 1, 2, 1, 1);
+		addComponent(c, gbl, chats, 1, 0, 2, 2, 1, 1);
 		
 		main.setSize(1024, 720);
 		
 		main.setVisible(true);
 	}
 	
-    static void addComponent( Container cont,
+    private void initGeneralChat() 
+    {
+		// TODO Auto-generated method stub
+	}
+
+	static void addComponent( Container cont,
             GridBagLayout gbl,
             Component c,
             int x, int y,

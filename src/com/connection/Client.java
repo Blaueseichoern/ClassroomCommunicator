@@ -6,18 +6,15 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.List;
 
-public class Client 
+public class Client
 {
-	ServerSocket receiver;
+	ServerSocket server;
 	
 	Socket client;
 	
 	Communicator communicator;
-	
-	List<Socket> connections;
 	
 	public Client(Communicator com)
 	{
@@ -25,42 +22,17 @@ public class Client
 		{
 			this.communicator = com;
 			
-			receiver = new ServerSocket(2008);
+			server = new ServerSocket(2008);
 			
 			client = new Socket("localhost", 2008);
-			
-			connections = new ArrayList<Socket>();
-			
-			Thread connect = new Connect();
-			connect.start();
 		} 
 		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
-		
-		
+			
 	}
-	
-	private class Connect extends Thread
-	{
-		@Override
-		public void run()
-		{
-			while(true)
-			{
-				try 
-				{
-					connections.add(receiver.accept());	
-				}
-				catch (IOException e) 
-				{
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-	
+		
 	private class Receive extends Thread
 	{
 		@Override
@@ -68,13 +40,13 @@ public class Client
 		{
 				try 
 				{
-					ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(client.getInputStream()));
+					ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(server.accept().getInputStream()));
 					
 					while(true)
 					{
 						Object obj = ois.readObject();
 						
-						if(obj != null && obj instanceof Chat)
+						if(obj != null)
 						{
 							communicator.handleInput(obj);
 						}
@@ -90,7 +62,11 @@ public class Client
 				}
 		}
 	}
-	
+	/**
+	 * Sends the specified object to the receivers
+	 * @param receivers
+	 * @param msg
+	 */
 	public void send(List<Socket> receivers, Object msg)
 	{
 		for(Socket s : receivers)
@@ -105,6 +81,24 @@ public class Client
 			{
 				e.printStackTrace();
 			}
+		}
+	}
+	
+	/**
+	 * sends to all in the Lan-network (port 2008)
+	 * @param msg
+	 */
+	public void send(Object msg)
+	{
+		try 
+		{
+			ObjectOutputStream oos = new ObjectOutputStream(client.getOutputStream());
+			
+			oos.writeObject(msg);
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
 		}
 	}
 }
