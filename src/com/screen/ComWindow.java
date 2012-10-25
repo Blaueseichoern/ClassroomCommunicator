@@ -12,6 +12,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import com.connection.Chat;
 import com.connection.Communicator;
 import com.connection.Participant;
 
@@ -23,7 +24,7 @@ public class ComWindow
 	
 	JFrame main;
 	JList<Participant> participants;
-	JPanel generalChat;
+	ChatPane generalChat;
 	JTabbedPane chats;
 	MessageField messages;
 	TextInput input;
@@ -44,7 +45,7 @@ public class ComWindow
 		
 		//CHATS
 		chats = new JTabbedPane();
-		generalChat = new JPanel();
+		generalChat = new ChatPane();
 		initGeneralChat();
 		chats.addTab("general Chat", generalChat);
 		
@@ -60,7 +61,7 @@ public class ComWindow
 	
     private void initGeneralChat() 
     {
-		// TODO Auto-generated method stub
+		
 	}
 
 	static void addComponent( Container cont,
@@ -79,5 +80,10 @@ public class ComWindow
        gbl.setConstraints( c, gbc );
        cont.add( c );
    }
+	
+	public void handleText(Chat msg)
+	{
+		generalChat.appendText(msg.getMessage());
+	}
 	
 }

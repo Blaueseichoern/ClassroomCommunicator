@@ -1,5 +1,6 @@
 package com.connection;
 
+import java.net.InetAddress;
 import java.net.Socket;
 
 /**
@@ -10,13 +11,13 @@ import java.net.Socket;
 public class Participant 
 {
 	String PCName, username;
-	Socket socket;
+	InetAddress address;
 	
-	public Participant(Socket s, String PC, String user)
+	public Participant(String PC, String user, InetAddress add)
 	{
-		socket = s;
 		PCName = PC;
 		username = user;
+		this.address = add;
 	}
 	
 	@Override

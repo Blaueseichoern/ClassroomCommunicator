@@ -25,6 +25,10 @@ public class Client
 			server = new ServerSocket(2008);
 			
 			client = new Socket("localhost", 2008);
+			
+			ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
+			
+			out.writeObject(new JoinEvent(com.getNickname(), com.getPCName(), client.getInetAddress()));
 		} 
 		catch (IOException e)
 		{

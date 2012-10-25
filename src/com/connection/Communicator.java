@@ -1,19 +1,26 @@
 package com.connection;
 
+import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
 import com.screen.ComWindow;
 
 public class Communicator 
 {
-	String username;
+	String nickname, pcName;
+	
+	ComWindow window;
 	
 	List<Participant> participants;
 	
-	public Communicator()
+	public Communicator(String nick, String PC)
 	{
+		this.pcName = PC;
+		this.nickname = nick;
 		participants = new ArrayList<Participant>();
 	}
 
@@ -21,24 +28,53 @@ public class Communicator
 	{
 		if(obj instanceof Chat)
 		{
-			//TODO
+			this.window.handleText((Chat)obj);
 		}
+		if(obj instanceof JoinEvent)
+		{
+			this.addParticipant(((JoinEvent)obj).formParticipant());
+		}
+	}
+	
+	public void setWindow(ComWindow com)
+	{
+		this.window = com;
 	}
 	
 	public static void main(String[] args)
 	{
-		ComWindow com = new ComWindow(new Communicator());
+		String user = JOptionPane.showInputDialog("Enter a nickname");
+		
+		try
+		{
+			Communicator communicator = new Communicator(user, InetAddress.getLocalHost().getHostName());
+			ComWindow com = new ComWindow(communicator);
+			communicator.setWindow(com);
+		} 
+		catch (UnknownHostException e) 
+		{
+			e.printStackTrace();
+		}
 	}
 
-	public void addParticipant(Socket client) 
+	public void addParticipant(Participant part) 
 	{
-		//TODO PC-Namen und Nickname bekommen
-		//participants.add();
+		participants.add(part);
 	}
 
 	public void send(String text) 
 	{
 		// TODO Auto-generated method stub
+	}
+	
+	public String getNickname()
+	{
+		return this.nickname;
+	}
+	
+	public String getPCName()
+	{
+		return this.pcName;
 	}
 	
 }
